@@ -1,0 +1,52 @@
+<div class="user-list animate-fade-in">
+  <div class="user-list__header">
+    <div>
+      <h1 class="page-title">Usuários</h1>
+      <p class="page-subtitle">Gerenciamento de membros da instituição</p>
+    </div>
+    <button mat-flat-button color="primary">
+      <mat-icon>add</mat-icon>
+      Novo Usuário
+    </button>
+  </div>
+
+  <div class="card">
+    <table mat-table [dataSource]="users()" class="user-list__table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nome</th>
+        <td mat-cell *matCellDef="let user">
+          <div class="user-list__name-cell">
+            <span class="user-list__user-name">{{ user.name }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="enrollment">
+        <th mat-header-cell *matHeaderCellDef>Matrícula</th>
+        <td mat-cell *matCellDef="let user">{{ user.enrollment }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>E-mail</th>
+        <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Tipo</th>
+        <td mat-cell *matCellDef="let user">{{ typeLabels[user.type] }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let user">
+          <span class="status-badge" [class.status-badge--active]="user.active" [class.status-badge--inactive]="!user.active">
+            {{ user.active ? 'Ativo' : 'Inativo' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

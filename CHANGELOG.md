@@ -2,12 +2,23 @@
 
 Aqui vou registrar tudo que andei mexendo no projeto, pra equipe saber o que está pronto e o que mudou.
 
+## [2026-05-21] — Correções de Navegação e Criação de Telas de Empréstimos/Usuários
+
+### Adicionado
+- **Tela de Empréstimos (`/loans`):** Criei uma tela dedicada contendo todos os empréstimos cadastrados, suporte a filtro por status e busca reativa por título de livro ou nome de usuário.
+- **Tela de Listagem de Usuários (`/users`):** Criei a tela de listagem de membros do sistema que carrega os dados mockados, permitindo visualizar nome, matrícula, e-mail, tipo de usuário e status (Ativo/Inativo).
+
+### Corrigido
+- **Navegação de Empréstimos:** Corrigi o link da barra lateral que antes voltava para o Dashboard por falta da rota `/loans`.
+- **Destaque de Links Ativos (Sidebar):** Configurei correspondência de rota exata (`exact: true`) na sidebar para evitar que as abas de "Usuários" e "Meu Perfil" ficassem ativas ao mesmo tempo quando o usuário estivesse visualizando o perfil.
+
 ## [2026-05-21] — Ajuste de Nome do Repositório e Setup Inicial
 
 ### Alterado
 - **Nome do Projeto:** Ajustei a padronização do nome do repositório remoto para `smart-library-web` no GitHub a pedido do Raul.
 
 ### O que eu criei (Adicionado)
+
 
 - **Estrutura de Rotas:** Configurei as rotas base do app com Lazy Loading no `app.routes.ts` usando componentes standalone do Angular.
 - **Modelos de Dados:** Criei as interfaces em `src/app/core/models/` para representar as entidades de `User`, `Book`, `Loan` e `Library`.

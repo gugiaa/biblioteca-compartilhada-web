@@ -8,6 +8,7 @@ interface NavItem {
   icon: string;
   label: string;
   route: string;
+  exact?: boolean;
 }
 
 @Component({
@@ -20,14 +21,14 @@ interface NavItem {
 export class SidebarComponent {
   
   navItems = signal<NavItem[]>([
-    { icon: 'dashboard', label: 'Dashboard', route: '/dashboard' },
+    { icon: 'dashboard', label: 'Dashboard', route: '/dashboard', exact: true },
     { icon: 'menu_book', label: 'Livros', route: '/books' },
     { icon: 'swap_horiz', label: 'Empréstimos', route: '/loans' },
-    { icon: 'people', label: 'Usuários', route: '/users' },
+    { icon: 'people', label: 'Usuários', route: '/users', exact: true },
   ]);
 
   secondaryNavItems = signal<NavItem[]>([
-    { icon: 'person', label: 'Meu Perfil', route: '/users/profile' },
-    { icon: 'settings', label: 'Configurações', route: '/settings' },
+    { icon: 'person', label: 'Meu Perfil', route: '/users/profile', exact: true },
+    { icon: 'settings', label: 'Configurações', route: '/settings', exact: true },
   ]);
 }

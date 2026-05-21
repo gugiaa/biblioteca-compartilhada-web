@@ -18,10 +18,16 @@ export const routes: Routes = [
           import('./features/books/books.routes').then((m) => m.BOOKS_ROUTES),
       },
       {
+        path: 'loans',
+        loadChildren: () =>
+          import('./features/loans/loans.routes').then((m) => m.LOANS_ROUTES),
+      },
+      {
         path: 'users',
         loadChildren: () =>
           import('./features/users/users.routes').then((m) => m.USERS_ROUTES),
       },
+
     ],
   },
   {

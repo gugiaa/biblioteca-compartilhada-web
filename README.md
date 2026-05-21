@@ -32,7 +32,8 @@ src/
 │   │   ├── auth/              # Esqueleto da tela de Login (pro novo membro terminar)
 │   │   ├── books/             # Tela com a lista de livros e cadastro lateral (Drawer)
 │   │   ├── dashboard/         # Dashboard com cards e tabela de empréstimos recentes
-│   │   └── users/             # Meu perfil e histórico de uso
+│   │   ├── loans/             # Tela de listagem e controle de empréstimos
+│   │   └── users/             # Perfis e gerenciamento de usuários (Listagem e Meu Perfil)
 │   ├── shared/                # Recursos compartilhados
 │   │   └── services/          # MockDataService (serviço que criei pra simular a API do João e Geferson)
 │   ├── app.component.ts       # Componente raiz
@@ -52,10 +53,10 @@ Aqui está a lista do que já implementei e o que ainda falta integrar com o bac
 
 | ID | Requisito | O que fiz / O que falta | Status |
 | :--- | :--- | :--- | :---: |
-| **RF01** | Cadastrar usuários | Fiz a estrutura, falta criar a tela de edição | 🚧 *Fazendo* |
+| **RF01** | Cadastrar usuários | Criei a tela de listagem de usuários. Falta a edição/cadastro | 🚧 *Fazendo* |
 | **RF02** | Cadastrar livros | Desenvolvi o Drawer lateral com formulário de cadastro de livros | ✅ **Concluído** |
-| **RF03** | Registrar empréstimos | Fiz a interface gráfica, falta a API do backend pra gravar | 🚧 *Aguardando API* |
-| **RF04** | Registrar devoluções | Criei as badges de status na tabela, falta a lógica de devolução | 🚧 *Aguardando API* |
+| **RF03** | Registrar empréstimos | Criei a interface dedicada de Empréstimos. Falta integrar a gravação | 🚧 *Aguardando API* |
+| **RF04** | Registrar devoluções | Desenvolvi a tabela e as badges de status de empréstimos. Falta lógica de devolução | 🚧 *Aguardando API* |
 | **RF05** | Fila de espera | Planejado para a próxima sprint | 📋 *Planejado* |
 | **RF06** | Enviar notificações | Planejado para a próxima sprint | 📋 *Planejado* |
 | **RF07** | Permitir reservas online | Planejado para a próxima sprint | 📋 *Planejado* |
