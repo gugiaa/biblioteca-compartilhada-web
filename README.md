@@ -1,6 +1,6 @@
 # Smart Library — Frontend (Gustavo de Lima)
 
-E aí, time! Repositório criado para concentrar toda a parte do frontend que ficou sob minha responsabilidade (Guga) no trabalho de Biblioteca Compartilhada (agora chamado de Smart Library). 
+E aí, time! Repositório criado para concentrar toda a parte do frontend que ficou sob minha responsabilidade (Guga) no desenvolvimento do Smart Library. 
 
 A arquitetura do projeto é cliente-servidor. Esta parte do app foi desenvolvida com **Angular 21**, enquanto o backend está sendo desenvolvido em **Java / Spring Boot** pela equipe de backend (João e Geferson), sob supervisão do Raul (Tech Lead).
 
@@ -72,7 +72,7 @@ Para baixar e testar no seu computador:
 1. Clone o projeto da branch principal.
 2. Acesse a pasta do projeto:
    ```bash
-   cd Biblioteca
+   cd smart-library-web
    ```
 3. Instalar as dependências do projeto:
    ```bash

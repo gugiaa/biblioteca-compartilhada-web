@@ -18,10 +18,5 @@ Registro de todas as alterações realizadas no projeto para controle interno e 
   - Criado `MockDataService` para simulação das chamadas de API do backend.
   - Configurado layout principal do sistema (Header, Sidebar e MainLayout) usando a fonte Inter e o Angular Material.
 
-### Alterado
-- **Nome do Projeto:** Padronizada a nomenclatura do projeto e o repositório remoto para `smart-library-web`.
-
 ### Corrigido
 - **Navegação Geral:** Corrigido o roteamento de empréstimos na barra lateral e ajustado o destaque de abas ativas para evitar a marcação simultânea indesejada de abas relacionadas a usuários.
-
-
