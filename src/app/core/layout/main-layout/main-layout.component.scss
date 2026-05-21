@@ -1,0 +1,8 @@
+.main-content {
+  margin-left: var(--sidebar-width);
+  margin-top: var(--header-height);
+  min-height: calc(100vh - var(--header-height));
+  padding: var(--spacing-lg);
+  background: var(--color-background);
+  transition: margin-left var(--transition-slow);
+}

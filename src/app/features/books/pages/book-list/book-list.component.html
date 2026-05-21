@@ -1,0 +1,62 @@
+<div class="books animate-fade-in">
+  <div class="books__header">
+    <div>
+      <h1 class="page-title">Livros</h1>
+      <p class="page-subtitle">Acervo completo da biblioteca</p>
+    </div>
+    <button mat-flat-button color="primary" class="books__add-btn" (click)="openDrawer()">
+      <mat-icon>add</mat-icon>
+      Novo Livro
+    </button>
+  </div>
+
+  <div class="books__search-bar">
+    <mat-icon class="books__search-icon">search</mat-icon>
+    <input
+      type="text"
+      class="books__search-input"
+      placeholder="Buscar por título, autor ou ISBN..."
+      [ngModel]="searchQuery()"
+      (ngModelChange)="onSearch($event)"
+    />
+  </div>
+
+  <div class="books__grid">
+    @for (book of filteredBooks(); track book.id) {
+      <div class="book-card">
+        <div class="book-card__cover">
+          <mat-icon class="book-card__cover-icon">menu_book</mat-icon>
+        </div>
+        <div class="book-card__content">
+          <h3 class="book-card__title">{{ book.title }}</h3>
+          <p class="book-card__author">{{ book.author }}</p>
+          <div class="book-card__meta">
+            <span class="book-card__category">
+              {{ categoryLabels[book.category] }}
+            </span>
+            <span class="book-card__year">{{ book.year }}</span>
+          </div>
+          <div class="book-card__footer">
+            <span
+              class="status-badge"
+              [class]="book.availableCopies > 0 ? 'status-badge--available' : 'status-badge--unavailable'"
+            >
+              @if (book.availableCopies > 0) {
+                {{ book.availableCopies }} disponível(is)
+              } @else {
+                Indisponível
+              }
+            </span>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="books__empty">
+        <mat-icon>search_off</mat-icon>
+        <p>Nenhum livro encontrado.</p>
+      </div>
+    }
+  </div>
+</div>
+
+<app-book-form-drawer #bookDrawer (bookSaved)="onBookSaved()" />

@@ -1,0 +1,64 @@
+<div class="dashboard animate-fade-in">
+  <div class="dashboard__header">
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-subtitle">Visão geral do sistema de biblioteca</p>
+  </div>
+
+  <div class="dashboard__stats">
+    @for (card of statCards(); track card.label) {
+      <div class="stat-card">
+        <div class="stat-card__icon" [style.background-color]="card.bgColor">
+          <mat-icon [style.color]="card.color">{{ card.icon }}</mat-icon>
+        </div>
+        <div class="stat-card__info">
+          <span class="stat-card__value">{{ card.value }}</span>
+          <span class="stat-card__label">{{ card.label }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="dashboard__section">
+    <h2 class="dashboard__section-title">
+      <mat-icon>history</mat-icon>
+      Empréstimos Recentes
+    </h2>
+
+    <div class="card">
+      <table mat-table [dataSource]="recentLoans()" class="dashboard__table">
+        
+        <ng-container matColumnDef="bookTitle">
+          <th mat-header-cell *matHeaderCellDef>Livro</th>
+          <td mat-cell *matCellDef="let loan">{{ loan.bookTitle }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="userName">
+          <th mat-header-cell *matHeaderCellDef>Usuário</th>
+          <td mat-cell *matCellDef="let loan">{{ loan.userName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="loanDate">
+          <th mat-header-cell *matHeaderCellDef>Data</th>
+          <td mat-cell *matCellDef="let loan">{{ loan.loanDate | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Devolução</th>
+          <td mat-cell *matCellDef="let loan">{{ loan.dueDate | date:'dd/MM/yyyy' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let loan">
+            <span class="status-badge" [class]="getStatusClass(loan.status)">
+              {{ statusLabels[loan.status] }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</div>
