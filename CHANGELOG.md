@@ -1,41 +1,27 @@
-# Meu Histórico de Alterações (Changelog — Gustavo de Lima)
+# Histórico de Alterações (Changelog — Gustavo de Lima)
 
-Aqui vou registrar tudo que andei mexendo no projeto, pra equipe saber o que está pronto e o que mudou.
+Registro de todas as alterações realizadas no projeto para controle interno e acompanhamento da equipe.
 
-## [2026-05-21] — Correções de Navegação e Criação de Telas de Empréstimos/Usuários
+## [2026-05-21] — Setup Inicial, Telas e Ajustes de Navegação
 
 ### Adicionado
-- **Tela de Empréstimos (`/loans`):** Criei uma tela dedicada contendo todos os empréstimos cadastrados, suporte a filtro por status e busca reativa por título de livro ou nome de usuário.
-- **Tela de Listagem de Usuários (`/users`):** Criei a tela de listagem de membros do sistema que carrega os dados mockados, permitindo visualizar nome, matrícula, e-mail, tipo de usuário e status (Ativo/Inativo).
-
-### Corrigido
-- **Navegação de Empréstimos:** Corrigi o link da barra lateral que antes voltava para o Dashboard por falta da rota `/loans`.
-- **Destaque de Links Ativos (Sidebar):** Configurei correspondência de rota exata (`exact: true`) na sidebar para evitar que as abas de "Usuários" e "Meu Perfil" ficassem ativas ao mesmo tempo quando o usuário estivesse visualizando o perfil.
-
-## [2026-05-21] — Ajuste de Nome do Repositório e Setup Inicial
+- **Tela de Empréstimos (`/loans`):** Criamos a listagem de empréstimos ativos, atrasados e devolvidos, com suporte a busca dinâmica e filtros por status.
+- **Tela de Membros/Usuários (`/users`):** Criamos a listagem de membros do sistema integrada com a simulação dos dados.
+- **Esqueleto de Telas e Navegação:**
+  - Desenvolvemos o Dashboard principal com os indicadores e empréstimos recentes.
+  - Implementamos a tela de gerenciamento de livros do acervo, incluindo busca por texto, filtros de categoria e gaveta lateral (Drawer) para cadastro de novos livros.
+  - Criamos a tela de exibição do Perfil com histórico de leituras.
+  - Desenvolvemos a estrutura de login com as validações de campos prontas para a integração com a API.
+- **Estrutura Base do App:**
+  - Configuramos o roteamento geral do app com Lazy Loading utilizando os componentes standalone do Angular 21.
+  - Estruturamos os modelos de dados principais para `User`, `Book`, `Loan` e `Library`.
+  - Criamos o `MockDataService` para simulação das chamadas de API do backend.
+  - Configuramos o layout principal do sistema (Header, Sidebar e MainLayout) usando a fonte Inter e o Angular Material.
 
 ### Alterado
-- **Nome do Projeto:** Ajustei a padronização do nome do repositório remoto para `smart-library-web` no GitHub a pedido do Raul.
+- **Nome do Projeto:** Padronizamos a nomenclatura do projeto e o repositório remoto para `smart-library-web`.
 
-### O que eu criei (Adicionado)
+### Corrigido
+- **Navegação Geral:** Corrigimos o roteamento de empréstimos na barra lateral e ajustamos o destaque de abas ativas para evitar a marcação simultânea indesejada de abas relacionadas a usuários.
 
-
-- **Estrutura de Rotas:** Configurei as rotas base do app com Lazy Loading no `app.routes.ts` usando componentes standalone do Angular.
-- **Modelos de Dados:** Criei as interfaces em `src/app/core/models/` para representar as entidades de `User`, `Book`, `Loan` e `Library`.
-- **Serviço de Mock:** Montei o `MockDataService` em `src/app/shared/services/` para simular a API de backend com dados fictícios para podermos testar as telas.
-- **Layout do App:**
-  - Ajustei o `index.html` para carregar a fonte *Inter*.
-  - Configurei variáveis de cores e layouts comuns no `styles.scss` (temas azul, cinza e laranja).
-  - Criei o componente de `HeaderComponent` (cabeçalho) com barra de busca e menu do usuário.
-  - Criei o componente de `SidebarComponent` (menu lateral) com links de navegação.
-  - Criei o `MainLayoutComponent` que envelopa todas as rotas logadas.
-- **Telas Prontas:**
-  - **Dashboard:** Montei os cards de resumo e uma tabela com os empréstimos recentes do sistema.
-  - **Meu Perfil:** Tela com informações pessoais do usuário, estatísticas de uso e histórico de livros que ele pegou.
-  - **Livros:** Lista de acervo com busca por texto, filtro de categorias e o Drawer lateral para cadastro de novos livros.
-  - **Login (Esqueleto):** Criei a tela de login simples com validações de e-mail e senha. Está pronta para o colega novo adicionar a lógica de integração com o backend.
-
-### O que eu alterei (Alterado)
-
-### O que eu consertei (Corrigido)
 
