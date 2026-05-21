@@ -2,9 +2,13 @@
 
 Aqui vou registrar tudo que andei mexendo no projeto, pra equipe saber o que está pronto e o que mudou.
 
-## [2026-05-21] — Setup Inicial, Telas e Ajustes de Internacionalização
+## [2026-05-21] — Ajuste de Nome do Repositório e Setup Inicial
+
+### Alterado
+- **Nome do Projeto:** Ajustei a padronização do nome do repositório remoto para `smart-library-web` no GitHub a pedido do Raul.
 
 ### O que eu criei (Adicionado)
+
 - **Estrutura de Rotas:** Configurei as rotas base do app com Lazy Loading no `app.routes.ts` usando componentes standalone do Angular.
 - **Modelos de Dados:** Criei as interfaces em `src/app/core/models/` para representar as entidades de `User`, `Book`, `Loan` e `Library`.
 - **Serviço de Mock:** Montei o `MockDataService` em `src/app/shared/services/` para simular a API de backend com dados fictícios para podermos testar as telas.

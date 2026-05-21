@@ -1,8 +1,9 @@
-# Sistema de Biblioteca Compartilhada — Frontend (Gustavo de Lima)
+# Smart Library — Frontend (Gustavo de Lima)
 
-E aí, time! Criei esse repositório para concentrar toda a parte do frontend que eu (Guga) fiquei responsável de fazer para o nosso trabalho de Biblioteca Compartilhada. 
+E aí, time! Criei esse repositório para concentrar toda a parte do frontend que eu (Guga) fiquei responsável de fazer para o nosso trabalho de Biblioteca Compartilhada (agora chamado de Smart Library). 
 
 A arquitetura do projeto é cliente-servidor. Eu cuido dessa parte do app com **Angular 21**, e o João e o Geferson estão desenvolvendo o backend em **Java / Spring Boot**. O Raul é o nosso Tech Lead e está supervisionando tudo.
+
 
 ---
 
