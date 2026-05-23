@@ -153,6 +153,7 @@ export class MockDataService {
       returnDate: new Date('2026-05-14'),
       status: 'RETURNED',
       libraryId: '1',
+      acceptedBy: 'Ana Souza (Bibliotecária)',
     },
     {
       id: '2',
@@ -165,6 +166,7 @@ export class MockDataService {
       returnDate: null,
       status: 'ACTIVE',
       libraryId: '1',
+      acceptedBy: 'Marcos Santos (Bibliotecário)',
     },
     {
       id: '3',
@@ -177,6 +179,7 @@ export class MockDataService {
       returnDate: null,
       status: 'OVERDUE',
       libraryId: '1',
+      acceptedBy: 'Juliana Rocha (Administradora)',
     },
     {
       id: '4',
@@ -189,6 +192,7 @@ export class MockDataService {
       returnDate: null,
       status: 'ACTIVE',
       libraryId: '2',
+      acceptedBy: 'Ana Souza (Bibliotecária)',
     },
   ];
 

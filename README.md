@@ -54,7 +54,7 @@ Lista do que já foi implementado e o que resta integrar com o backend:
 | :--- | :--- | :--- | :---: |
 | **RF01** | Cadastrar usuários | Criada a tela de listagem de usuários. Resta implementar a edição/cadastro | 🚧 *Fazendo* |
 | **RF02** | Cadastrar livros | Desenvolvido o Drawer lateral com formulário de cadastro de livros | ✅ **Concluído** |
-| **RF03** | Registrar empréstimos | Criada a interface dedicada de Empréstimos. Resta integrar a gravação | 🚧 *Aguardando API* |
+| **RF03** | Registrar empréstimos | Criada a interface de Empréstimos e o modal com informações detalhadas para visualização do administrador. Resta integrar a gravação | 🚧 *Aguardando API* |
 | **RF04** | Registrar devoluções | Desenvolvida a tabela e as badges de status de empréstimos. Resta implementar a lógica de devolução | 🚧 *Aguardando API* |
 | **RF05** | Fila de espera | Planejado para a próxima sprint | 📋 *Planejado* |
 | **RF06** | Enviar notificações | Planejado para a próxima sprint | 📋 *Planejado* |

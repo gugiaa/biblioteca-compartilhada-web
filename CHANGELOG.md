@@ -2,6 +2,13 @@
 
 Registro de todas as alterações realizadas no projeto para controle interno e acompanhamento da equipe.
 
+## [2026-05-23] — Detalhes de Empréstimo e Modal de Visualização
+
+### Adicionado
+- **Modal de Detalhes do Empréstimo:** Implementada a exibição de um modal detalhado (diálogo) ao clicar em qualquer registro de empréstimo na tabela.
+- **Campos do Empréstimo:** Inclusão de dados no modal como ID do livro, ID do usuário, data de empréstimo, data de devolução prevista, data efetiva de devolução, status e o operador responsável que aceitou a operação.
+- **Modelos e Simulação:** Adicionado o campo `acceptedBy` na interface `Loan` e preenchidos os dados de teste correspondentes no `MockDataService`.
+
 ## [2026-05-21] — Setup Inicial, Telas e Ajustes de Navegação
 
 ### Adicionado

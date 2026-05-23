@@ -1,10 +1,11 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, TemplateRef } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MockDataService } from '../../../../shared/services/mock-data.service';
@@ -20,6 +21,7 @@ import { Loan, LOAN_STATUS_LABELS, LoanStatus } from '../../../../core/models/lo
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatDialogModule,
     DatePipe,
     FormsModule,
   ],
@@ -30,6 +32,7 @@ export class LoanListComponent implements OnInit {
   loans = signal<Loan[]>([]);
   searchQuery = signal<string>('');
   statusFilter = signal<string>('ALL');
+  selectedLoan = signal<Loan | null>(null);
 
   displayedColumns: string[] = ['bookTitle', 'userName', 'loanDate', 'dueDate', 'returnDate', 'status'];
   statusLabels: Record<string, string> = LOAN_STATUS_LABELS;
@@ -54,7 +57,10 @@ export class LoanListComponent implements OnInit {
     return list;
   });
 
-  constructor(private mockDataService: MockDataService) {}
+  constructor(
+    private mockDataService: MockDataService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loans.set(this.mockDataService.getLoans());
@@ -68,5 +74,13 @@ export class LoanListComponent implements OnInit {
       RESERVED: 'status-badge--reserved',
     };
     return classes[status] || '';
+  }
+
+  openLoanDetails(loan: Loan, template: TemplateRef<any>): void {
+    this.selectedLoan.set(loan);
+    this.dialog.open(template, {
+      width: '500px',
+      panelClass: 'custom-dialog-container',
+    });
   }
 }
