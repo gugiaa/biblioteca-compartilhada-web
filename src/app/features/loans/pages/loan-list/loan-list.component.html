@@ -4,7 +4,7 @@
       <h1 class="page-title">Empréstimos</h1>
       <p class="page-subtitle">Gerenciamento e controle de empréstimos de livros</p>
     </div>
-    <button mat-flat-button color="primary">
+    <button mat-flat-button color="primary" (click)="openNewLoan(newLoanTemplate)">
       <mat-icon>swap_horiz</mat-icon>
       Novo Empréstimo
     </button>
@@ -173,8 +173,84 @@
       </mat-dialog-content>
 
       <mat-dialog-actions align="end" class="loan-detail-dialog__actions">
-        <button mat-button mat-dialog-close color="primary">Fechar</button>
+        @if (loan.status === 'ACTIVE' || loan.status === 'OVERDUE') {
+          <button mat-flat-button color="accent" (click)="renew(loan.id)" type="button" style="margin-right: 8px;">
+            Renovar
+          </button>
+          <button mat-flat-button color="primary" (click)="returnLoan(loan.id)" type="button" style="margin-right: 8px;">
+            Devolver
+          </button>
+        }
+        <button mat-button mat-dialog-close type="button">Fechar</button>
       </mat-dialog-actions>
     </div>
   }
+</ng-template>
+
+<ng-template #newLoanTemplate>
+  <div class="loan-detail-dialog">
+    <div class="loan-detail-dialog__header">
+      <h2 mat-dialog-title class="loan-detail-dialog__title">
+        <mat-icon>swap_horiz</mat-icon>
+        Registrar Novo Empréstimo
+      </h2>
+      <button mat-icon-button mat-dialog-close aria-label="Fechar">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <form [formGroup]="newLoanForm" (ngSubmit)="submitNewLoan()">
+      <mat-dialog-content class="loan-detail-dialog__content">
+        <div class="loan-detail-dialog__section">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Selecionar Livro</mat-label>
+            <mat-select formControlName="bookId">
+              @for (book of books(); track book.id) {
+                <mat-option [value]="book.id">
+                  {{ book.title }} ({{ book.availableCopies }} disp.)
+                </mat-option>
+              }
+            </mat-select>
+            @if (newLoanForm.controls.bookId.touched && newLoanForm.controls.bookId.invalid) {
+              <mat-error>O livro é obrigatório.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Selecionar Membro</mat-label>
+            <mat-select formControlName="userId">
+              @for (user of users(); track user.id) {
+                <mat-option [value]="user.id">
+                  {{ user.name }} (Matrícula: {{ user.enrollment }})
+                </mat-option>
+              }
+            </mat-select>
+            @if (newLoanForm.controls.userId.touched && newLoanForm.controls.userId.invalid) {
+              <mat-error>O membro é obrigatório.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Data Limite de Devolução</mat-label>
+            <input matInput type="date" formControlName="dueDate">
+            @if (newLoanForm.controls.dueDate.touched && newLoanForm.controls.dueDate.invalid) {
+              <mat-error>A data limite é obrigatória.</mat-error>
+            }
+          </mat-form-field>
+
+          <div class="loan-detail-dialog__field" style="margin-top: 16px;">
+            <span class="label">Operador Responsável</span>
+            <span class="value font-medium">Gustavo de Lima (Admin)</span>
+          </div>
+        </div>
+      </mat-dialog-content>
+
+      <mat-dialog-actions align="end" class="loan-detail-dialog__actions">
+        <button mat-button mat-dialog-close type="button">Cancelar</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="newLoanForm.invalid">
+          Confirmar Empréstimo
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
 </ng-template>

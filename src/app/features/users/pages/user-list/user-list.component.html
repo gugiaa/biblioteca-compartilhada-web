@@ -4,7 +4,7 @@
       <h1 class="page-title">Usuários</h1>
       <p class="page-subtitle">Gerenciamento de membros da instituição</p>
     </div>
-    <button mat-flat-button color="primary">
+    <button mat-flat-button color="primary" (click)="openUserForm(userFormTemplate)">
       <mat-icon>add</mat-icon>
       Novo Usuário
     </button>
@@ -45,8 +45,101 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let user">
+          <button mat-icon-button color="primary" (click)="openUserForm(userFormTemplate, user)" aria-label="Editar membro" type="button" style="margin-right: 4px;">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button [color]="user.active ? 'warn' : 'accent'" (click)="toggleStatus(user.id)" [ariaLabel]="user.active ? 'Bloquear membro' : 'Desbloquear membro'" type="button">
+            <mat-icon>{{ user.active ? 'block' : 'check_circle' }}</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </div>
 </div>
+
+<ng-template #userFormTemplate>
+  <div class="loan-detail-dialog">
+    <div class="loan-detail-dialog__header">
+      <h2 mat-dialog-title class="loan-detail-dialog__title">
+        <mat-icon>{{ isEditing() ? 'edit' : 'person_add' }}</mat-icon>
+        {{ isEditing() ? 'Editar Membro' : 'Cadastrar Novo Membro' }}
+      </h2>
+      <button mat-icon-button mat-dialog-close aria-label="Fechar">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <form [formGroup]="userForm" (ngSubmit)="submitUserForm()">
+      <mat-dialog-content class="loan-detail-dialog__content">
+        <div class="loan-detail-dialog__section">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nome Completo</mat-label>
+            <input matInput formControlName="name" placeholder="Ex: João da Silva">
+            @if (userForm.controls.name.touched && userForm.controls.name.invalid) {
+              <mat-error>O nome é obrigatório (mín. 2 caracteres).</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>E-mail Institucional</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="Ex: joao@ifpe.edu.br">
+            @if (userForm.controls.email.touched && userForm.controls.email.invalid) {
+              <mat-error>Digite um e-mail válido.</mat-error>
+            }
+          </mat-form-field>
+
+          <div class="loan-detail-dialog__grid" style="margin-bottom: 8px;">
+            <mat-form-field appearance="outline">
+              <mat-label>Matrícula / ID</mat-label>
+              <input matInput formControlName="enrollment" placeholder="Ex: 2024001">
+              @if (userForm.controls.enrollment.touched && userForm.controls.enrollment.invalid) {
+                <mat-error>A matrícula é obrigatória.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Telefone</mat-label>
+              <input matInput formControlName="phone" placeholder="Ex: (11) 99999-0000">
+              @if (userForm.controls.phone.touched && userForm.controls.phone.invalid) {
+                <mat-error>O telefone é obrigatório.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="loan-detail-dialog__grid" style="margin-bottom: 8px;">
+            <mat-form-field appearance="outline">
+              <mat-label>Tipo de Membro</mat-label>
+              <mat-select formControlName="type">
+                <mat-option value="STUDENT">Aluno</mat-option>
+                <mat-option value="PROFESSOR">Professor</mat-option>
+                <mat-option value="STAFF">Funcionário</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Biblioteca Vinculada</mat-label>
+              <mat-select formControlName="libraryId">
+                @for (lib of libraries(); track lib.id) {
+                  <mat-option [value]="lib.id">{{ lib.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-dialog-content>
+
+      <mat-dialog-actions align="end" class="loan-detail-dialog__actions">
+        <button mat-button mat-dialog-close type="button">Cancelar</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="userForm.invalid">
+          Salvar Cadastro
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+</ng-template>

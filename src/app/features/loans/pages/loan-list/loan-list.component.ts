@@ -7,9 +7,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MockDataService } from '../../../../shared/services/mock-data.service';
 import { Loan, LOAN_STATUS_LABELS, LoanStatus } from '../../../../core/models/loan.model';
+import { Book } from '../../../../core/models/book.model';
+import { User } from '../../../../core/models/user.model';
 
 @Component({
   selector: 'app-loan-list',
@@ -24,6 +26,7 @@ import { Loan, LOAN_STATUS_LABELS, LoanStatus } from '../../../../core/models/lo
     MatDialogModule,
     DatePipe,
     FormsModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './loan-list.component.html',
   styleUrl: './loan-list.component.scss',
@@ -33,9 +36,17 @@ export class LoanListComponent implements OnInit {
   searchQuery = signal<string>('');
   statusFilter = signal<string>('ALL');
   selectedLoan = signal<Loan | null>(null);
+  users = signal<User[]>([]);
+  books = signal<Book[]>([]);
 
   displayedColumns: string[] = ['bookTitle', 'userName', 'loanDate', 'dueDate', 'returnDate', 'status'];
   statusLabels: Record<string, string> = LOAN_STATUS_LABELS;
+
+  newLoanForm = new FormGroup({
+    userId: new FormControl('', { validators: [Validators.required], nonNullable: true }),
+    bookId: new FormControl('', { validators: [Validators.required], nonNullable: true }),
+    dueDate: new FormControl(this.getDefaultDueDate(), { validators: [Validators.required], nonNullable: true }),
+  });
 
   filteredLoans = computed(() => {
     let list = this.loans();
@@ -63,7 +74,13 @@ export class LoanListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData(): void {
     this.loans.set(this.mockDataService.getLoans());
+    this.users.set(this.mockDataService.getUsers().filter((u) => u.active));
+    this.books.set(this.mockDataService.getBooks().filter((b) => b.availableCopies > 0));
   }
 
   getStatusClass(status: LoanStatus): string {
@@ -76,11 +93,73 @@ export class LoanListComponent implements OnInit {
     return classes[status] || '';
   }
 
+  getDefaultDueDate(): string {
+    const date = new Date();
+    date.setDate(date.getDate() + 14);
+    return date.toISOString().substring(0, 10);
+  }
+
   openLoanDetails(loan: Loan, template: TemplateRef<any>): void {
     this.selectedLoan.set(loan);
     this.dialog.open(template, {
       width: '500px',
       panelClass: 'custom-dialog-container',
     });
+  }
+
+  openNewLoan(template: TemplateRef<any>): void {
+    this.newLoanForm.reset({
+      userId: '',
+      bookId: '',
+      dueDate: this.getDefaultDueDate(),
+    });
+    this.dialog.open(template, {
+      width: '500px',
+      panelClass: 'custom-dialog-container',
+    });
+  }
+
+  submitNewLoan(): void {
+    if (this.newLoanForm.invalid) return;
+
+    const { userId, bookId, dueDate } = this.newLoanForm.getRawValue();
+    const user = this.users().find((u) => u.id === userId);
+    const book = this.books().find((b) => b.id === bookId);
+
+    if (user && book) {
+      this.mockDataService.addLoan({
+        userId,
+        userName: user.name,
+        bookId,
+        bookTitle: book.title,
+        loanDate: new Date(),
+        dueDate: new Date(dueDate),
+        returnDate: null,
+        status: 'ACTIVE',
+        libraryId: user.libraryId,
+        acceptedBy: 'Gustavo de Lima',
+      });
+
+      this.loadData();
+      this.dialog.closeAll();
+    }
+  }
+
+  renew(id: string): void {
+    const updated = this.mockDataService.renewLoan(id);
+    if (updated) {
+      this.loadData();
+      this.selectedLoan.set(updated);
+      this.dialog.closeAll();
+    }
+  }
+
+  returnLoan(id: string): void {
+    const updated = this.mockDataService.returnLoan(id);
+    if (updated) {
+      this.loadData();
+      this.selectedLoan.set(updated);
+      this.dialog.closeAll();
+    }
   }
 }

@@ -93,3 +93,115 @@
     margin-top: 2px;
   }
 }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dashboard-half-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+  }
+
+  &__label {
+    color: var(--color-text-primary);
+  }
+
+  &__value {
+    color: var(--color-text-secondary);
+  }
+
+  &__bar-bg {
+    height: 8px;
+    background-color: var(--color-border-light);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    border-radius: var(--radius-sm);
+    transition: width var(--transition-slow);
+  }
+}
+
+.log-feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+
+  &__item {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: flex-start;
+  }
+
+  &__icon-container {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: var(--color-primary);
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    line-height: 1.4;
+  }
+
+  &__time {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-disabled);
+  }
+}

@@ -5,8 +5,8 @@
   <aside class="drawer">
     <div class="drawer__header">
       <h2 class="drawer__title">
-        <mat-icon>add_circle</mat-icon>
-        Novo Livro
+        <mat-icon>{{ isEditing() ? 'edit' : 'add_circle' }}</mat-icon>
+        {{ isEditing() ? 'Editar Livro' : 'Novo Livro' }}
       </h2>
       <button mat-icon-button (click)="close()" aria-label="Fechar">
         <mat-icon>close</mat-icon>

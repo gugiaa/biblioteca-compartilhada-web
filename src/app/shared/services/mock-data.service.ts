@@ -8,7 +8,12 @@ import { Library } from '../../core/models/library.model';
   providedIn: 'root',
 })
 export class MockDataService {
-  
+  private logs: { action: string; timestamp: Date }[] = [
+    { action: 'Sistema iniciado com sucesso.', timestamp: new Date(Date.now() - 7200000) },
+    { action: 'Livro "Clean Code" retirado pelo usuário Gustavo de Lima.', timestamp: new Date(Date.now() - 3600000) },
+    { action: 'Empréstimo #1 devolvido pelo usuário Gustavo de Lima.', timestamp: new Date(Date.now() - 1800000) }
+  ];
+
   private libraries: Library[] = [
     { id: '1', name: 'Biblioteca Central', address: 'Bloco A, Térreo', active: true },
     { id: '2', name: 'Biblioteca de Engenharia', address: 'Bloco E, 2º Andar', active: true },
@@ -216,13 +221,116 @@ export class MockDataService {
     return this.books.find((b) => b.id === id);
   }
 
+  addLog(action: string): void {
+    this.logs.unshift({ action, timestamp: new Date() });
+  }
+
+  getLogs(): { action: string; timestamp: Date }[] {
+    return [...this.logs];
+  }
+
   addBook(book: Omit<Book, 'id'>): Book {
     const newBook: Book = {
       ...book,
       id: String(this.books.length + 1),
     };
     this.books.push(newBook);
+    this.addLog(`Livro "${newBook.title}" adicionado ao acervo.`);
     return newBook;
+  }
+
+  updateBook(id: string, updatedBook: Partial<Book>): Book | undefined {
+    const book = this.books.find((b) => b.id === id);
+    if (book) {
+      Object.assign(book, updatedBook);
+      this.addLog(`Livro "${book.title}" atualizado.`);
+    }
+    return book;
+  }
+
+  deleteBook(id: string): boolean {
+    const index = this.books.findIndex((b) => b.id === id);
+    if (index !== -1) {
+      const title = this.books[index].title;
+      this.books.splice(index, 1);
+      this.addLog(`Livro "${title}" removido do acervo.`);
+      return true;
+    }
+    return false;
+  }
+
+  addUser(user: Omit<User, 'id' | 'createdAt'>): User {
+    const newUser: User = {
+      ...user,
+      id: String(this.users.length + 1),
+      createdAt: new Date(),
+    };
+    this.users.push(newUser);
+    this.addLog(`Membro "${newUser.name}" cadastrado.`);
+    return newUser;
+  }
+
+  updateUser(id: string, updatedUser: Partial<User>): User | undefined {
+    const user = this.users.find((u) => u.id === id);
+    if (user) {
+      Object.assign(user, updatedUser);
+      this.addLog(`Membro "${user.name}" atualizado.`);
+    }
+    return user;
+  }
+
+  toggleUserStatus(id: string): User | undefined {
+    const user = this.users.find((u) => u.id === id);
+    if (user) {
+      user.active = !user.active;
+      const statusText = user.active ? 'desbloqueado' : 'bloqueado';
+      this.addLog(`Membro "${user.name}" foi ${statusText}.`);
+    }
+    return user;
+  }
+
+  addLoan(loan: Omit<Loan, 'id'>): Loan {
+    const newLoan: Loan = {
+      ...loan,
+      id: String(this.loans.length + 1),
+    };
+    this.loans.push(newLoan);
+
+    const book = this.books.find((b) => b.id === newLoan.bookId);
+    if (book && book.availableCopies > 0) {
+      book.availableCopies--;
+    }
+
+    this.addLog(`Empréstimo do livro "${newLoan.bookTitle}" para "${newLoan.userName}" registrado.`);
+    return newLoan;
+  }
+
+  returnLoan(id: string): Loan | undefined {
+    const loan = this.loans.find((l) => l.id === id);
+    if (loan && loan.status !== 'RETURNED') {
+      loan.status = 'RETURNED';
+      loan.returnDate = new Date();
+
+      const book = this.books.find((b) => b.id === loan.bookId);
+      if (book) {
+        book.availableCopies = Math.min(book.totalCopies, book.availableCopies + 1);
+      }
+
+      this.addLog(`Livro "${loan.bookTitle}" devolvido por "${loan.userName}".`);
+    }
+    return loan;
+  }
+
+  renewLoan(id: string): Loan | undefined {
+    const loan = this.loans.find((l) => l.id === id);
+    if (loan && (loan.status === 'ACTIVE' || loan.status === 'OVERDUE')) {
+      const newDueDate = new Date(loan.dueDate);
+      newDueDate.setDate(newDueDate.getDate() + 14);
+      loan.dueDate = newDueDate;
+      loan.status = 'ACTIVE';
+      this.addLog(`Empréstimo do livro "${loan.bookTitle}" para "${loan.userName}" renovado por 14 dias.`);
+    }
+    return loan;
   }
 
   getLoans(): Loan[] {

@@ -6,7 +6,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
-import { BOOK_CATEGORY_LABELS, BookCategory } from '../../../../core/models/book.model';
+import { BOOK_CATEGORY_LABELS, BookCategory, Book } from '../../../../core/models/book.model';
 import { MockDataService } from '../../../../shared/services/mock-data.service';
 
 @Component({
@@ -29,15 +29,12 @@ export class BookFormDrawerComponent {
   private mockData = inject(MockDataService);
 
   closed = output<void>();
-
   bookSaved = output<void>();
-
   isOpen = signal(false);
-
+  isEditing = signal(false);
+  editingBookId: string | null = null;
   categoryLabels = BOOK_CATEGORY_LABELS;
-
   categories = signal<BookCategory[]>(Object.keys(BOOK_CATEGORY_LABELS) as BookCategory[]);
-
   libraries = signal(this.mockData.getLibraries());
 
   bookForm = this.fb.group({
@@ -45,26 +42,44 @@ export class BookFormDrawerComponent {
     author: ['', [Validators.required, Validators.minLength(2)]],
     isbn: ['', [Validators.required]],
     publisher: ['', [Validators.required]],
-    year: [2024, [Validators.required, Validators.min(1000), Validators.max(2030)]],
+    year: [2026, [Validators.required, Validators.min(1000), Validators.max(2035)]],
     category: ['TECHNOLOGY' as BookCategory, [Validators.required]],
     totalCopies: [1, [Validators.required, Validators.min(1)]],
     libraryId: ['1', [Validators.required]],
     description: [''],
   });
 
-  open(): void {
+  open(book?: Book): void {
     this.isOpen.set(true);
-    this.bookForm.reset({
-      title: '',
-      author: '',
-      isbn: '',
-      publisher: '',
-      year: 2024,
-      category: 'TECHNOLOGY',
-      totalCopies: 1,
-      libraryId: '1',
-      description: '',
-    });
+    if (book) {
+      this.isEditing.set(true);
+      this.editingBookId = book.id;
+      this.bookForm.reset({
+        title: book.title,
+        author: book.author,
+        isbn: book.isbn,
+        publisher: book.publisher,
+        year: book.year,
+        category: book.category,
+        totalCopies: book.totalCopies,
+        libraryId: book.libraryId,
+        description: book.description,
+      });
+    } else {
+      this.isEditing.set(false);
+      this.editingBookId = null;
+      this.bookForm.reset({
+        title: '',
+        author: '',
+        isbn: '',
+        publisher: '',
+        year: 2026,
+        category: 'TECHNOLOGY',
+        totalCopies: 1,
+        libraryId: '1',
+        description: '',
+      });
+    }
   }
 
   close(): void {
@@ -75,7 +90,7 @@ export class BookFormDrawerComponent {
   onSave(): void {
     if (this.bookForm.valid) {
       const formValue = this.bookForm.getRawValue();
-      this.mockData.addBook({
+      const bookData = {
         title: formValue.title!,
         author: formValue.author!,
         isbn: formValue.isbn!,
@@ -87,7 +102,14 @@ export class BookFormDrawerComponent {
         libraryId: formValue.libraryId!,
         coverUrl: null,
         description: formValue.description || '',
-      });
+      };
+
+      if (this.isEditing() && this.editingBookId) {
+        this.mockData.updateBook(this.editingBookId, bookData);
+      } else {
+        this.mockData.addBook(bookData);
+      }
+
       this.bookSaved.emit();
       this.close();
     } else {

@@ -68,11 +68,24 @@ export class BookListComponent implements OnInit {
     );
   }
 
-  openDrawer(): void {
-    this.bookDrawer()?.open();
+  openDrawer(book?: Book): void {
+    this.bookDrawer()?.open(book);
   }
 
   onBookSaved(): void {
     this.loadBooks();
+  }
+
+  editBook(book: Book): void {
+    this.openDrawer(book);
+  }
+
+  deleteBook(bookId: string): void {
+    if (confirm('Tem certeza de que deseja remover este livro do acervo?')) {
+      const success = this.mockData.deleteBook(bookId);
+      if (success) {
+        this.loadBooks();
+      }
+    }
   }
 }

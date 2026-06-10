@@ -47,6 +47,14 @@
                 Indisponível
               }
             </span>
+            <div class="book-card__actions">
+              <button mat-icon-button color="primary" (click)="editBook(book)" aria-label="Editar livro" type="button">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteBook(book.id)" aria-label="Excluir livro" type="button">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -18,47 +18,153 @@
     }
   </div>
 
-  <div class="dashboard__section">
-    <h2 class="dashboard__section-title">
-      <mat-icon>history</mat-icon>
-      Empréstimos Recentes
-    </h2>
+  <div class="dashboard-grid">
+    <div class="dashboard__section" style="margin-bottom: 0;">
+      <h2 class="dashboard__section-title">
+        <mat-icon>history</mat-icon>
+        Empréstimos Recentes
+      </h2>
 
-    <div class="card">
-      <table mat-table [dataSource]="recentLoans()" class="dashboard__table">
-        
-        <ng-container matColumnDef="bookTitle">
-          <th mat-header-cell *matHeaderCellDef>Livro</th>
-          <td mat-cell *matCellDef="let loan">{{ loan.bookTitle }}</td>
-        </ng-container>
+      <div class="card" style="overflow-x: auto;">
+        <table mat-table [dataSource]="recentLoans()" class="dashboard__table">
+          <ng-container matColumnDef="bookTitle">
+            <th mat-header-cell *matHeaderCellDef>Livro</th>
+            <td mat-cell *matCellDef="let loan">{{ loan.bookTitle }}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="userName">
-          <th mat-header-cell *matHeaderCellDef>Usuário</th>
-          <td mat-cell *matCellDef="let loan">{{ loan.userName }}</td>
-        </ng-container>
+          <ng-container matColumnDef="userName">
+            <th mat-header-cell *matHeaderCellDef>Usuário</th>
+            <td mat-cell *matCellDef="let loan">{{ loan.userName }}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="loanDate">
-          <th mat-header-cell *matHeaderCellDef>Data</th>
-          <td mat-cell *matCellDef="let loan">{{ loan.loanDate | date:'dd/MM/yyyy' }}</td>
-        </ng-container>
+          <ng-container matColumnDef="loanDate">
+            <th mat-header-cell *matHeaderCellDef>Data</th>
+            <td mat-cell *matCellDef="let loan">{{ loan.loanDate | date:'dd/MM/yyyy' }}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="dueDate">
-          <th mat-header-cell *matHeaderCellDef>Devolução</th>
-          <td mat-cell *matCellDef="let loan">{{ loan.dueDate | date:'dd/MM/yyyy' }}</td>
-        </ng-container>
+          <ng-container matColumnDef="dueDate">
+            <th mat-header-cell *matHeaderCellDef>Devolução</th>
+            <td mat-cell *matCellDef="let loan">{{ loan.dueDate | date:'dd/MM/yyyy' }}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let loan">
-            <span class="status-badge" [class]="getStatusClass(loan.status)">
-              {{ statusLabels[loan.status] }}
-            </span>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let loan">
+              <span class="status-badge" [class]="getStatusClass(loan.status)">
+                {{ statusLabels[loan.status] }}
+              </span>
+            </td>
+          </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="dashboard__section" style="margin-bottom: 0;">
+      <h2 class="dashboard__section-title">
+        <mat-icon>pie_chart</mat-icon>
+        Categorias Populares
+      </h2>
+
+      <div class="card chart-card">
+        @for (cat of categoryData(); track cat.label) {
+          <div class="chart-card__item">
+            <div class="chart-card__info">
+              <span class="chart-card__label">{{ cat.label }}</span>
+              <span class="chart-card__value">{{ cat.count }} livro(s) ({{ cat.percentage }}%)</span>
+            </div>
+            <div class="chart-card__bar-bg">
+              <div
+                class="chart-card__bar-fill"
+                [style.width.%]="cat.percentage"
+                [style.background-color]="cat.color"
+              ></div>
+            </div>
+          </div>
+        } @empty {
+          <p>Nenhuma categoria registrada.</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-half-grid">
+    <div class="dashboard__section">
+      <h2 class="dashboard__section-title">
+        <mat-icon>assignment</mat-icon>
+        Atividades Recentes (Auditoria)
+      </h2>
+
+      <div class="card">
+        <div class="log-feed">
+          @for (log of logs(); track log.timestamp) {
+            <div class="log-feed__item">
+              <div class="log-feed__icon-container">
+                <mat-icon>info_outline</mat-icon>
+              </div>
+              <div class="log-feed__content">
+                <span class="log-feed__text">{{ log.action }}</span>
+                <span class="log-feed__time">{{ log.timestamp | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+              </div>
+            </div>
+          } @empty {
+            <p>Nenhuma atividade registrada.</p>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard__section">
+      <h2 class="dashboard__section-title">
+        <mat-icon>bar_chart</mat-icon>
+        Resumo de Status
+      </h2>
+
+      <div class="card chart-card">
+        <div class="chart-card__item">
+          <div class="chart-card__info">
+            <span class="chart-card__label">Empréstimos Ativos</span>
+            <span class="chart-card__value">{{ stats().activeLoans }} ativos</span>
+          </div>
+          <div class="chart-card__bar-bg">
+            <div
+              class="chart-card__bar-fill"
+              [style.width.%]="stats().totalBooks > 0 ? (stats().activeLoans / stats().totalBooks * 100) : 0"
+              style="background-color: var(--color-info);"
+            ></div>
+          </div>
+        </div>
+
+        <div class="chart-card__item">
+          <div class="chart-card__info">
+            <span class="chart-card__label">Empréstimos Atrasados</span>
+            <span class="chart-card__value">{{ stats().overdueLoans }} atrasados</span>
+          </div>
+          <div class="chart-card__bar-bg">
+            <div
+              class="chart-card__bar-fill"
+              [style.width.%]="stats().activeLoans > 0 ? (stats().overdueLoans / stats().activeLoans * 100) : 0"
+              style="background-color: var(--color-error);"
+            ></div>
+          </div>
+        </div>
+
+        <div class="chart-card__item">
+          <div class="chart-card__info">
+            <span class="chart-card__label">Livros Disponíveis no Acervo</span>
+            <span class="chart-card__value">{{ stats().totalBooks - stats().activeLoans }} disp.</span>
+          </div>
+          <div class="chart-card__bar-bg">
+            <div
+              class="chart-card__bar-fill"
+              [style.width.%]="stats().totalBooks > 0 ? ((stats().totalBooks - stats().activeLoans) / stats().totalBooks * 100) : 0"
+              style="background-color: var(--color-success);"
+            ></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

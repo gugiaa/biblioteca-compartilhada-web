@@ -1,6 +1,27 @@
-# Histórico de Alterações (Changelog — Gustavo de Lima)
+# Histórico de Alterações — Smart Library
 
 Registro de todas as alterações realizadas no projeto para controle interno e acompanhamento da equipe.
+
+## [2026-06-10] — Painel de Administração e Operações Completas (Mocks)
+
+### Adicionado
+- **Operações de Empréstimos:**
+  - Desenvolvido formulário reativo de Novo Empréstimo para cadastro de transações.
+  - Implementadas ações de "Devolver" e "Renovar" empréstimo diretamente no modal de detalhes, atualizando dinamicamente o status e a quantidade de exemplares disponíveis do livro.
+- **Operações de Acervo de Livros:**
+  - Implementadas ações de edição e exclusão de livros na listagem.
+  - Adaptado o Drawer lateral de livros para operar de forma híbrida (cadastro e edição de dados).
+- **Operações de Membros/Usuários:**
+  - Implementado o cadastro e edição de membros com formulário reativo em modal.
+  - Adicionada a ação rápida de "Bloquear/Desbloquear" usuários com reatividade de tela imediata.
+- **Dashboard Admin & Auditoria:**
+  - Desenvolvidos gráficos estatísticos estilizados via CSS e SVG para distribuição por categorias e resumo de status de empréstimos.
+  - Adicionado feed de logs de atividades (auditoria simples) exibindo as últimas ações tomadas pelos administradores em tempo real.
+- **Estilos Globais:**
+  - Movidas as classes de estilização de modais e diálogos para o arquivo de estilo global (`styles.scss`) para reutilização unificada.
+
+### Corrigido
+- **Tipagem no TypeScript:** Corrigida a assinatura do método de criação de usuários no mock de dados para omitir propriedades geradas de forma interna.
 
 ## [2026-05-23] — Detalhes de Empréstimo e Modal de Visualização
 
