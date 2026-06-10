@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed, TemplateRef } from '@angular/core';
+import { Component, OnInit, signal, computed, TemplateRef, inject } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +12,7 @@ import { MockDataService } from '../../../../shared/services/mock-data.service';
 import { Loan, LOAN_STATUS_LABELS, LoanStatus } from '../../../../core/models/loan.model';
 import { Book } from '../../../../core/models/book.model';
 import { User } from '../../../../core/models/user.model';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-loan-list',
@@ -32,6 +33,8 @@ import { User } from '../../../../core/models/user.model';
   styleUrl: './loan-list.component.scss',
 })
 export class LoanListComponent implements OnInit {
+  authService = inject(AuthService);
+
   loans = signal<Loan[]>([]);
   searchQuery = signal<string>('');
   statusFilter = signal<string>('ALL');
@@ -39,8 +42,14 @@ export class LoanListComponent implements OnInit {
   users = signal<User[]>([]);
   books = signal<Book[]>([]);
 
-  displayedColumns: string[] = ['bookTitle', 'userName', 'loanDate', 'dueDate', 'returnDate', 'status'];
   statusLabels: Record<string, string> = LOAN_STATUS_LABELS;
+
+  displayedColumns = computed(() => {
+    if (this.authService.isAdmin()) {
+      return ['bookTitle', 'userName', 'loanDate', 'dueDate', 'returnDate', 'status'];
+    }
+    return ['bookTitle', 'loanDate', 'dueDate', 'returnDate', 'status'];
+  });
 
   newLoanForm = new FormGroup({
     userId: new FormControl('', { validators: [Validators.required], nonNullable: true }),
@@ -55,7 +64,7 @@ export class LoanListComponent implements OnInit {
 
     if (query) {
       list = list.filter(
-        (l) =>
+         (l) =>
           l.bookTitle.toLowerCase().includes(query) ||
           l.userName.toLowerCase().includes(query)
       );
@@ -78,9 +87,16 @@ export class LoanListComponent implements OnInit {
   }
 
   loadData(): void {
-    this.loans.set(this.mockDataService.getLoans());
-    this.users.set(this.mockDataService.getUsers().filter((u) => u.active));
-    this.books.set(this.mockDataService.getBooks().filter((b) => b.availableCopies > 0));
+    const user = this.authService.currentUser();
+    if (this.authService.isAdmin()) {
+      this.loans.set(this.mockDataService.getLoans());
+      this.users.set(this.mockDataService.getUsers().filter((u) => u.active));
+      this.books.set(this.mockDataService.getBooks().filter((b) => b.availableCopies > 0));
+    } else if (user) {
+      this.loans.set(this.mockDataService.getLoansByUserId(user.id));
+      this.users.set([]);
+      this.books.set([]);
+    }
   }
 
   getStatusClass(status: LoanStatus): string {

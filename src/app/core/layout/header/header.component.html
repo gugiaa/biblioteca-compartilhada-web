@@ -27,11 +27,16 @@
 
     <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="Menu do usuário">
       <div class="header__avatar">
-        <span>GS</span>
+        <span>{{ userInitials() }}</span>
       </div>
     </button>
 
     <mat-menu #userMenu="matMenu">
+      <div style="padding: 12px 16px; min-width: 220px;">
+        <div style="font-weight: 600; color: var(--color-text-primary); font-size: var(--font-size-md);">{{ authService.currentUser()?.name }}</div>
+        <div style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin-top: 2px;">{{ authService.currentUser()?.email }}</div>
+      </div>
+      <mat-divider></mat-divider>
       <button mat-menu-item>
         <mat-icon>person</mat-icon>
         <span>Meu Perfil</span>
@@ -41,7 +46,7 @@
         <span>Configurações</span>
       </button>
       <mat-divider></mat-divider>
-      <button mat-menu-item>
+      <button mat-menu-item (click)="logout()">
         <mat-icon>logout</mat-icon>
         <span>Sair</span>
       </button>

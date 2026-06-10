@@ -94,3 +94,4 @@ Diretrizes e padrões adotados no desenvolvimento para garantir a padronização
 - **Signals:** Utilização de Signals (`signal()`) do Angular em todas as reatividades locais.
 - **Estruturas no HTML:** Utilização da nova sintaxe de control flow (`@if`, `@for`, `@switch`) do Angular 21.
 - **Internacionalização:** Configuração da localização global para `pt-BR` no `app.config.ts`, permitindo a formatação automática de datas e meses em português.
+- **Controle de Acesso (RBAC):** Proteção de rotas e adaptação dinâmica da interface por meio de guards funcionais baseados no papel do usuário ativo (Administrador vs Membro).

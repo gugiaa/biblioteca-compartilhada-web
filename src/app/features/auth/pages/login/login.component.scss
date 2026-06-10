@@ -9,7 +9,7 @@
 
 .login-container {
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,47 +64,119 @@
     font-weight: 600;
     color: var(--color-text-primary);
     margin-bottom: var(--spacing-xs);
+    text-align: center;
   }
 
   &__card-subtitle {
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
     margin-bottom: var(--spacing-lg);
+    text-align: center;
   }
 
-  &__form {
+  &__quick-access {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
-
-    mat-form-field {
-      width: 100%;
-    }
+    gap: var(--spacing-md);
   }
 
-  &__options {
+  &__role-card {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--spacing-md);
-  }
-
-  &__forgot {
-    font-size: var(--font-size-sm);
-    color: var(--color-primary);
-    text-decoration: none;
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    outline: none;
 
     &:hover {
-      text-decoration: underline;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+
+      .login__role-arrow {
+        transform: translateX(4px);
+      }
+    }
+
+    &--admin {
+      &:hover {
+        background-color: var(--color-primary-light);
+        border-color: var(--color-primary);
+
+        .login__role-icon-wrapper {
+          background-color: var(--color-primary);
+          color: white;
+        }
+
+        .login__role-arrow {
+          color: var(--color-primary);
+        }
+      }
+    }
+
+    &--user {
+      &:hover {
+        background-color: #F3E5F5;
+        border-color: #7B1FA2;
+
+        .login__role-icon-wrapper {
+          background-color: #7B1FA2;
+          color: white;
+        }
+
+        .login__role-arrow {
+          color: #7B1FA2;
+        }
+      }
     }
   }
 
-  &__submit-btn {
-    width: 100%;
+  &__role-icon-wrapper {
+    width: 48px;
     height: 48px;
-    font-size: var(--font-size-lg) !important;
-    font-weight: 600 !important;
-    border-radius: var(--radius-md) !important;
+    border-radius: var(--radius-md);
+    background-color: var(--color-background);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: var(--spacing-md);
+    transition: all var(--transition-normal);
+    flex-shrink: 0;
+
+    mat-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  &__role-info {
+    flex: 1;
+
+    h3 {
+      font-size: var(--font-size-md);
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin: 0 0 var(--spacing-xs) 0;
+    }
+
+    p {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+      margin: 0;
+      line-height: 1.4;
+    }
+  }
+
+  &__role-arrow {
+    color: var(--color-text-disabled);
+    transition: all var(--transition-normal);
+    margin-left: var(--spacing-sm);
   }
 
   &__footer {

@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { MockDataService } from '../../../../shared/services/mock-data.service';
 import { Book, BOOK_CATEGORY_LABELS } from '../../../../core/models/book.model';
 import { BookFormDrawerComponent } from '../../components/book-form-drawer/book-form-drawer.component';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-book-list',
@@ -30,6 +31,7 @@ import { BookFormDrawerComponent } from '../../components/book-form-drawer/book-
 })
 export class BookListComponent implements OnInit {
   private mockData = inject(MockDataService);
+  authService = inject(AuthService);
 
   bookDrawer = viewChild<BookFormDrawerComponent>('bookDrawer');
 

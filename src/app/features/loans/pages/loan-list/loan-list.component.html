@@ -4,16 +4,18 @@
       <h1 class="page-title">Empréstimos</h1>
       <p class="page-subtitle">Gerenciamento e controle de empréstimos de livros</p>
     </div>
-    <button mat-flat-button color="primary" (click)="openNewLoan(newLoanTemplate)">
-      <mat-icon>swap_horiz</mat-icon>
-      Novo Empréstimo
-    </button>
+    @if (authService.isAdmin()) {
+      <button mat-flat-button color="primary" (click)="openNewLoan(newLoanTemplate)">
+        <mat-icon>swap_horiz</mat-icon>
+        Novo Empréstimo
+      </button>
+    }
   </div>
 
   <div class="loan-list__filters">
     <mat-form-field appearance="outline" class="loan-list__search">
-      <mat-label>Buscar por livro ou usuário</mat-label>
-      <input matInput [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="Digite para buscar...">
+      <mat-label>{{ authService.isAdmin() ? 'Buscar por livro ou usuário' : 'Buscar por livro' }}</mat-label>
+      <input matInput [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" [placeholder]="authService.isAdmin() ? 'Digite para buscar...' : 'Buscar por livro...'">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
@@ -173,7 +175,7 @@
       </mat-dialog-content>
 
       <mat-dialog-actions align="end" class="loan-detail-dialog__actions">
-        @if (loan.status === 'ACTIVE' || loan.status === 'OVERDUE') {
+        @if (authService.isAdmin() && (loan.status === 'ACTIVE' || loan.status === 'OVERDUE')) {
           <button mat-flat-button color="accent" (click)="renew(loan.id)" type="button" style="margin-right: 8px;">
             Renovar
           </button>
