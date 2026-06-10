@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { MockDataService } from '../../../../shared/services/mock-data.service';
 import { User, USER_TYPE_LABELS } from '../../../../core/models/user.model';
 import { Loan, LOAN_STATUS_LABELS } from '../../../../core/models/loan.model';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -19,6 +20,7 @@ import { Loan, LOAN_STATUS_LABELS } from '../../../../core/models/loan.model';
 })
 export class UserProfileComponent implements OnInit {
   private mockData = inject(MockDataService);
+  private authService = inject(AuthService);
 
   user = signal<User | null>(null);
 
@@ -33,8 +35,7 @@ export class UserProfileComponent implements OnInit {
   displayedColumns = ['bookTitle', 'loanDate', 'dueDate', 'returnDate', 'status'];
 
   ngOnInit(): void {
-
-    const currentUser = this.mockData.getUserById('1');
+    const currentUser = this.authService.currentUser();
     if (currentUser) {
       this.user.set(currentUser);
       this.userLoans.set(this.mockData.getLoansByUserId(currentUser.id));

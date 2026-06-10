@@ -14,6 +14,12 @@ Registro de todas as alterações realizadas no projeto para controle interno e 
   - Adaptada a visualização do Header para exibir dinamicamente iniciais no avatar, nome e e-mail no menu, e implementar a ação de Logout.
   - Ocultados recursos de criação, edição e exclusão de livros para usuários comuns na listagem de acervo.
   - Restringido o histórico de empréstimos ao ID do usuário ativo quando logado como Membro, com ocultação dos botões de devolução/renovação/registro de empréstimos.
+- **Dashboard Único do Leitor (Membro):**
+  - Desenvolvido o painel estatístico pessoal do leitor na página inicial do dashboard para usuários comuns.
+  - Inseridos indicadores de controle de leitura (Livros lidos, empréstimos ativos, livros em atraso e data do próximo vencimento).
+  - Adicionado feed de atividades recentes pessoais e seção de livros recomendados dinamicamente com base nas categorias do acervo.
+- **Módulo de Configurações:**
+  - Desenvolvida a feature de configurações (`/settings`) com formulário reativo para personalização do tema, idioma e frequência de alertas.
 - **Operações Administrativas completas:**
   - Desenvolvido formulário reativo de Novo Empréstimo para cadastro de transações.
   - Implementadas ações de "Devolver" e "Renovar" empréstimo diretamente no modal de detalhes, atualizando dinamicamente o status e a quantidade de exemplares disponíveis do livro.
@@ -28,6 +34,11 @@ Registro de todas as alterações realizadas no projeto para controle interno e 
   - Movidas as classes de estilização de modais e diálogos para o arquivo de estilo global (`styles.scss`) para reutilização unificada.
 
 ### Corrigido
+- **Tabela de Empréstimos e Dashboard:**
+  - Corrigido o erro de runtime causado pela falta de invocação explícita do Signal computed `displayedColumns()` nos templates HTML da listagem de empréstimos e do dashboard.
+- **Roteamento de Perfil:**
+  - Corrigido o bloqueio da página de perfil do usuário (`/users/profile`) para membros comuns ao mover a restrição de permissão do `AdminGuard` do escopo da rota pai `/users` para a rota de listagem de membros.
+  - Corrigida a fixação de perfil no componente de visualização de perfil para puxar os dados do usuário autenticado no momento via `AuthService`.
 - **Importações e Tipagem:**
   - Corrigida a assinatura do método de criação de usuários no mock de dados para omitir propriedades geradas de forma interna.
   - Corrigida a importação ausente da função `inject` no componente de empréstimos.

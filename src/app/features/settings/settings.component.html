@@ -1,0 +1,70 @@
+<div class="settings animate-fade-in">
+  <div class="settings__header">
+    <h1 class="page-title">Configurações</h1>
+    <p class="page-subtitle">Personalize a sua experiência no Smart Library</p>
+  </div>
+
+  <div class="settings__content">
+    <mat-card class="settings__card">
+      <mat-card-content>
+        <form [formGroup]="settingsForm" (ngSubmit)="onSave()" class="settings__form">
+          <div class="settings__section">
+            <h2 class="settings__section-title">
+              <mat-icon>palette</mat-icon>
+              Visual e Idioma
+            </h2>
+            <div class="settings__grid">
+              <mat-form-field appearance="outline">
+                <mat-label>Tema do Painel</mat-label>
+                <mat-select formControlName="theme">
+                  <mat-option value="light">Tema Claro</mat-option>
+                  <mat-option value="dark">Tema Escuro</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Idioma Padrão</mat-label>
+                <mat-select formControlName="language">
+                  <mat-option value="pt-BR">Português (Brasil)</mat-option>
+                  <mat-option value="en-US">English (United States)</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="settings__section-divider"></div>
+
+          <div class="settings__section">
+            <h2 class="settings__section-title">
+              <mat-icon>notifications</mat-icon>
+              Notificações
+            </h2>
+            <div class="settings__checkbox-list">
+              <mat-checkbox formControlName="emailNotifications" color="primary">
+                Receber notificações por e-mail sobre novas movimentações
+              </mat-checkbox>
+
+              <mat-checkbox formControlName="dueAlerts" color="primary">
+                Alertar-me sobre devoluções próximas do prazo de vencimento
+              </mat-checkbox>
+            </div>
+
+            <mat-form-field appearance="outline" class="settings__frequency" style="margin-top: 16px;">
+              <mat-label>Frequência de Alertas</mat-label>
+              <mat-select formControlName="alertFrequency">
+                <mat-option value="daily">Diária</mat-option>
+                <mat-option value="weekly">Semanal</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="settings__actions">
+            <button mat-flat-button color="primary" type="submit" [disabled]="settingsForm.invalid">
+              Salvar Configurações
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

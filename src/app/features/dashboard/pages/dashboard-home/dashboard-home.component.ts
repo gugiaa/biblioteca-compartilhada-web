@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -6,6 +6,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { DatePipe } from '@angular/common';
 import { MockDataService } from '../../../../shared/services/mock-data.service';
 import { Loan, LOAN_STATUS_LABELS } from '../../../../core/models/loan.model';
+import { Book, BOOK_CATEGORY_LABELS } from '../../../../core/models/book.model';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -16,17 +18,39 @@ import { Loan, LOAN_STATUS_LABELS } from '../../../../core/models/loan.model';
 })
 export class DashboardHomeComponent implements OnInit {
   private mockData = inject(MockDataService);
+  authService = inject(AuthService);
+
+  isAdmin = signal(false);
 
   stats = signal({ totalBooks: 0, totalUsers: 0, activeLoans: 0, overdueLoans: 0 });
   recentLoans = signal<Loan[]>([]);
   statusLabels: Record<string, string> = LOAN_STATUS_LABELS;
-  displayedColumns = ['bookTitle', 'userName', 'loanDate', 'dueDate', 'status'];
-  statCards = signal<{ icon: string; label: string; value: number; color: string; bgColor: string }[]>([]);
+  categoryLabels = BOOK_CATEGORY_LABELS;
 
+  displayedColumns = computed(() => {
+    if (this.authService.isAdmin()) {
+      return ['bookTitle', 'userName', 'loanDate', 'dueDate', 'status'];
+    }
+    return ['bookTitle', 'loanDate', 'dueDate', 'status'];
+  });
+
+  statCards = signal<{ icon: string; label: string; value: number | string; color: string; bgColor: string }[]>([]);
   logs = signal<{ action: string; timestamp: Date }[]>([]);
   categoryData = signal<{ label: string; count: number; percentage: number; color: string }[]>([]);
+  recommendedBooks = signal<Book[]>([]);
 
   ngOnInit(): void {
+    const isAdm = this.authService.isAdmin();
+    this.isAdmin.set(isAdm);
+
+    if (isAdm) {
+      this.loadAdminDashboard();
+    } else {
+      this.loadUserDashboard();
+    }
+  }
+
+  private loadAdminDashboard(): void {
     const s = this.mockData.getStats();
     this.stats.set(s);
     this.recentLoans.set(this.mockData.getLoans().slice(0, 5));
@@ -72,6 +96,44 @@ export class DashboardHomeComponent implements OnInit {
     }).sort((a, b) => b.count - a.count).slice(0, 4);
 
     this.categoryData.set(catData);
+  }
+
+  private loadUserDashboard(): void {
+    const user = this.authService.currentUser();
+    if (user) {
+      const uStats = this.mockData.getUserStats(user.id);
+      const loans = this.mockData.getLoansByUserId(user.id);
+      this.recentLoans.set(loans.slice(0, 5));
+
+      const activeLoans = loans.filter((l) => l.status === 'ACTIVE' || l.status === 'OVERDUE');
+      let nextDue = 'Nenhum';
+      if (activeLoans.length > 0) {
+        const sorted = [...activeLoans].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+        const nextDate = new Date(sorted[0].dueDate);
+        const day = String(nextDate.getDate()).padStart(2, '0');
+        const month = String(nextDate.getMonth() + 1).padStart(2, '0');
+        nextDue = `${day}/${month}`;
+      }
+
+      this.statCards.set([
+        { icon: 'check_circle', label: 'Livros Lidos', value: uStats.returnedLoans, color: '#2E7D32', bgColor: '#E8F5E9' },
+        { icon: 'swap_horiz', label: 'Empréstimos Ativos', value: uStats.activeLoans, color: '#1565C0', bgColor: '#E3F2FD' },
+        { icon: 'warning', label: 'Em Atraso', value: uStats.overdueLoans, color: '#C62828', bgColor: '#FFEBEE' },
+        { icon: 'event', label: 'Próximo Vencimento', value: nextDue, color: '#FF8F00', bgColor: '#FFF8E1' },
+      ]);
+
+      const userLogs = this.mockData.getLogs().filter((log) =>
+        log.action.includes(user.name) || log.action.includes('Membro')
+      );
+      this.logs.set(userLogs.slice(0, 6));
+
+      const allBooks = this.mockData.getBooks();
+      const recommended = allBooks.filter((b) =>
+        b.availableCopies > 0 &&
+        (b.category === 'TECHNOLOGY' || b.category === 'LITERATURE')
+      ).slice(0, 3);
+      this.recommendedBooks.set(recommended);
+    }
   }
 
   getStatusClass(status: string): string {

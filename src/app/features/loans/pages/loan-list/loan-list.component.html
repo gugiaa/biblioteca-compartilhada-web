@@ -69,8 +69,8 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openLoanDetails(row, loanDetailsTemplate)" class="loan-list__row"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns();" (click)="openLoanDetails(row, loanDetailsTemplate)" class="loan-list__row"></tr>
     </table>
 
     @if (filteredLoans().length === 0) {

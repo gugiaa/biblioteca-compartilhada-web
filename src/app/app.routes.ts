@@ -12,7 +12,6 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
-        canActivate: [adminGuard],
         loadChildren: () =>
           import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
       },
@@ -28,9 +27,13 @@ export const routes: Routes = [
       },
       {
         path: 'users',
-        canActivate: [adminGuard],
         loadChildren: () =>
           import('./features/users/users.routes').then((m) => m.USERS_ROUTES),
+      },
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('./features/settings/settings.routes').then((m) => m.SETTINGS_ROUTES),
       },
     ],
   },
